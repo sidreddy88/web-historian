@@ -25,16 +25,62 @@ exports.initialize = function(pathsObj){
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(){
+exports.readListOfUrls = function(callback){
+	fs.readFile(exports.paths.list, function(err, sites) {
+    sites = sites.toString().split('\n');
+    if( callback ){
+      callback(sites);
+    }
+  });
+  // fs.readFile('../archives/sites.txt', 'utf8', function (err,data) {
+  // 	var sites = data.split(" ")
+  //   if (err) {
+  //   return console.log(err);
+  //    } 
+  //   if (callback) {
+  //   	callback(sites);
+  //   }
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, callback){
+	  exports.readListOfUrls(function(sites) {
+    var found = _.any(sites, function(site, i) {
+      return site.match(url)
+    });
+    callback(found);
+  });
+// 	fs.readFile('../archives/sites.txt', 'utf8', function (err,data) {
+//      var sites = data.split(" ")
+//      if (err) {
+//        return console.log(err);
+//      } 
+//      var found = false;
+//      _any(sites, function (site) {
+//      	if (site === url){
+//           found = true;
+//      	}
+//      })
+//      if (callback){
+//      	callback(found);
+//      }
+// });
+
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+	fs.appendFile(exports.paths.list, url+'\n', function(err, file){
+    callback();
+  });
+  // fs.writeFile("sites.txt", url, function (err) {
+  //   if (err) return console.log(err);
+  //     console.log('Hello World > helloworld.txt');
+  //  });
+
+
 };
 
 exports.isURLArchived = function(){
+	
 };
 
 exports.downloadUrls = function(){

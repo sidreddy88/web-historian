@@ -1,7 +1,31 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
-// require more modules/folders here!
+var utils = require('./http-helpers');
+var urlParser = require('url');
 
-exports.handleRequest = function (req, res) {
-  res.end(archive.paths.list);
+
+var actions = {
+  
+  'GET': function(request, response){
+  	var parts = urlParser.parse(request.url);
+  	var urlPath = parts.pathname === '/' ? '/index.html' : parts.pathname;
+  	utils.serveAssets(response, urlPath);
+  
+  },
+
+  'POST': function(request, response){
+    
+  },
+   
 };
+
+exports.handleRequest = function(request, response) {
+  var action = actions[request.method];
+  if( action ){
+    action(request, response);
+  } else {
+    utils.sendResponse(response, "Not Found", 404);
+  }
+};
+
+
