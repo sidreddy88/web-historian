@@ -79,9 +79,19 @@ exports.addUrlToList = function(url){
 
 };
 
-exports.isURLArchived = function(){
-	
+exports.isURLArchived = function(callback){
+	var sitePath =  path.join(exports.paths.archivedSites, url);
+
+  fs.exists(sitePath, function(exists) {
+    callback(exists);
+  });
+
 };
 
 exports.downloadUrls = function(){
+	_.each(urls, function(url) {
+    if(!url){ return; }
+    request('http://' + url).pipe(fs.createWriteStream(exports.paths.archivedSites + "/" + url));
+  });
+  return true;
 };

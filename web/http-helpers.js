@@ -31,6 +31,12 @@ exports.send404 = function(response){
   exports.sendResponse(response, '404: Page not found', 404);
 };
 
+exports.sendRedirect = function(response, location, status){
+  status = status || 302;
+  response.writeHead(status, {Location: location});
+  response.end();
+};
+
 exports.serveAssets = function(res, asset, callback) {
   var encoding = {encoding: 'utf8'};
 
